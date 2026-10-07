@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Cadastro</title>
+
+<link rel="stylesheet" href="style.css">
+
+<table class=table > 
+    <tr>
+	    <td style="text-align:center";><a href=formulario.html>Cadastro </a></td> 
+		<td style="text-align:center";><a href=index.html>Inicio</a></td>
+		<td style="text-align:center";><a href=alugueis.html>Alugueis</a></td>
+		<td style="text-align:center";><a href=creditos.html>Creditos</a></td>		
+	</tr>
+</table>
+
+<script>
+
+function nomeMaiusculo(campo) {
+
+    palavras = campo.value.split(" ");
+
+    i = 0;
+
+    while(i < palavras.length) {
+
+        if(palavras[i].length > 0) {
+
+            palavras[i] = palavras[i].charAt(0).toUpperCase() + palavras[i].slice(1);
+
+        }
+
+        i++;
+
+    }
+
+    campo.value = palavras.join(" ");
+
+}
+
+
+function formatarCPF(campo) {
+
+    campo.value = campo.value.replace(/[^0-9]/g,"");
+
+    if(campo.value.length > 11) {
+
+        campo.value = campo.value.substring(0,11);
+
+    }
+
+
+    if(campo.value.length > 9) {
+
+        campo.value = campo.value.substring(0,3)+"."+
+                      campo.value.substring(3,6)+"."+
+                      campo.value.substring(6,9)+"-"+
+                      campo.value.substring(9,11);
+
+    } 
+    else if(campo.value.length > 6) {
+
+        campo.value = campo.value.substring(0,3)+"."+
+                      campo.value.substring(3,6)+"."+
+                      campo.value.substring(6);
+
+    } 
+    else if(campo.value.length > 3) {
+
+        campo.value = campo.value.substring(0,3)+"."+
+                      campo.value.substring(3);
+
+    }
+
+}
+
+
+
+function dataFormatada(campo) {
+
+    campo.value = campo.value.replace(/[^0-9]/g,"");
+
+
+    if(campo.value.length > 8) {
+
+        campo.value = campo.value.substring(0,8);
+
+    }
+
+
+    if(campo.value.length > 4) {
+
+        campo.value = campo.value.substring(0,2)+"/"+
+                      campo.value.substring(2,4)+"/"+
+                      campo.value.substring(4);
+
+    } 
+    else if(campo.value.length > 2) {
+
+        campo.value = campo.value.substring(0,2)+"/"+
+                      campo.value.substring(2);
+
+    }
+
+}
+
+
+
+function validarData(data) {
+
+    dia = Number(data.substring(0,2));
+    mes = Number(data.substring(3,5));
+    ano = Number(data.substring(6,10));
+
+
+    if(ano < 1937 || ano > 2026) {
+
+        return false;
+
+    }
+
+
+    if(mes < 1 || mes > 12 || dia < 1) {
+
+        return false;
+
+    }
+
+
+    bissexto = false;
+
+
+    if(ano % 4 == 0) {
+
+        bissexto = true;
+
+    }
+
+
+    diasMes = 31;
+
+
+    if(mes == 4 || mes == 6 || mes == 9 || mes == 11) {
+
+        diasMes = 30;
+
+    }
+
+
+    if(mes == 2) {
+
+        if(bissexto == true) {
+
+            diasMes = 29;
+
+        } else {
+
+            diasMes = 28;
+
+        }
+
+    }
+
+
+    if(dia > diasMes) {
+
+        return false;
+
+    }
+
+
+    return true;
+
+}
+
+
+
+function calcular(event) {
+
+    event.preventDefault();
+
+
+    nome = document.getElementById("nome").value;
+    cpf = document.getElementById("cpf").value;
+    gmail = document.getElementById("gmail").value;
+    data = document.getElementById("data").value;
+    senha = document.getElementById("senha").value;
+
+
+
+    if(nome == "" || cpf == "" || gmail == "" || data == "" || senha == "") {
+
+        alert("Preencha todos os campos");
+
+        return;
+
+    }
+
+
+
+    if(cpf.length != 14) {
+
+        alert("CPF incompleto");
+
+        return;
+
+    }
+
+
+
+    if(data.length != 10) {
+
+        alert("Data incompleta");
+
+        return;
+
+    }
+
+
+
+    if(validarData(data) == false) {
+
+        alert("Data inválida");
+
+        return;
+
+    }
+
+
+
+    if(senha.length < 8) {
+
+        alert("A senha deve conter no mínimo 8 caracteres.");
+
+        return;
+
+    }
+
+
+
+    alert("Cadastro concluído!");
+
+}
+
+</script>
+
+
+</head>
+
+
+<body>
+
+
+<form onsubmit="calcular(event)">
+
+
+<div>
+
+
+<h1>Cadastro</h1>
+
+
+Nome:<br>
+
+<input type="text" id="nome" placeholder="Digite seu nome" oninput="nomeMaiusculo(this)">
+
+
+<br><br>
+
+
+CPF:<br>
+
+<input type="text" id="cpf" placeholder="000.000.000-00" oninput="formatarCPF(this)">
+
+
+<br><br>
+
+
+Gmail:<br>
+
+<input type="text" id="gmail" placeholder="Digite seu Gmail">
+
+
+<br><br>
+
+
+Data de nascimento:<br>
+
+<input type="text" id="data" placeholder="dd/mm/aaaa" oninput="dataFormatada(this)">
+
+
+<br><br>
+
+
+Senha:<br>
+
+<input type="password" id="senha" placeholder="Digite sua senha">
+
+
+<br><br>
+
+
+<button type="submit">Cadastrar</button>
+
+
+</div>
+
+
+</form>
+
+
+</body>
+
+</html>
